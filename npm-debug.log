@@ -2,21 +2,21 @@
 1 verbose cli [ '/usr/local/Cellar/node/6.3.1/bin/node',
 1 verbose cli   '/usr/local/bin/npm',
 1 verbose cli   'start' ]
-2 info using npm@3.10.3
+2 info using npm@4.0.3
 3 info using node@v6.3.1
 4 verbose run-script [ 'prestart', 'start', 'poststart' ]
 5 info lifecycle project-10@0.0.0~prestart: project-10@0.0.0
 6 silly lifecycle project-10@0.0.0~prestart: no script for prestart, continuing
 7 info lifecycle project-10@0.0.0~start: project-10@0.0.0
 8 verbose lifecycle project-10@0.0.0~start: unsafe-perm in lifecycle true
-9 verbose lifecycle project-10@0.0.0~start: PATH: /usr/local/lib/node_modules/npm/bin/node-gyp-bin:/Users/Prittie/Desktop/Treehouse projects/Project 10/Project 10/node_modules/.bin:/usr/local/Cellar/node/6.3.1/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+9 verbose lifecycle project-10@0.0.0~start: PATH: /usr/local/lib/node_modules/npm/bin/node-gyp-bin:/Users/Prittie/Desktop/Treehouse projects/Project 10/Project 10/node_modules/.bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
 10 verbose lifecycle project-10@0.0.0~start: CWD: /Users/Prittie/Desktop/Treehouse projects/Project 10/Project 10
 11 silly lifecycle project-10@0.0.0~start: Args: [ '-c', 'node ./bin/www' ]
 12 silly lifecycle project-10@0.0.0~start: Returned: code: 1  signal: null
 13 info lifecycle project-10@0.0.0~start: Failed to exec start script
 14 verbose stack Error: project-10@0.0.0 start: `node ./bin/www`
 14 verbose stack Exit status 1
-14 verbose stack     at EventEmitter.<anonymous> (/usr/local/lib/node_modules/npm/lib/utils/lifecycle.js:242:16)
+14 verbose stack     at EventEmitter.<anonymous> (/usr/local/lib/node_modules/npm/lib/utils/lifecycle.js:279:16)
 14 verbose stack     at emitTwo (events.js:106:13)
 14 verbose stack     at EventEmitter.emit (events.js:191:7)
 14 verbose stack     at ChildProcess.<anonymous> (/usr/local/lib/node_modules/npm/lib/utils/spawn.js:40:14)
@@ -29,7 +29,7 @@
 17 error Darwin 15.6.0
 18 error argv "/usr/local/Cellar/node/6.3.1/bin/node" "/usr/local/bin/npm" "start"
 19 error node v6.3.1
-20 error npm  v3.10.3
+20 error npm  v4.0.3
 21 error code ELIFECYCLE
 22 error project-10@0.0.0 start: `node ./bin/www`
 22 error Exit status 1
