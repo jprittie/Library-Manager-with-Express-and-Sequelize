@@ -1,7 +1,6 @@
 'use strict';
 module.exports = function(sequelize, DataTypes) {
   var Loan = sequelize.define('Loan', {
-    id: DataTypes.INTEGER,
     book_id: DataTypes.INTEGER,
     patron_id: DataTypes.INTEGER,
     loaned_on: DataTypes.DATE,
@@ -12,7 +11,8 @@ module.exports = function(sequelize, DataTypes) {
       associate: function(models) {
         // associations can be defined here
       }
-    }
+    },
+    timestamps: false
   });
   return Loan;
 };

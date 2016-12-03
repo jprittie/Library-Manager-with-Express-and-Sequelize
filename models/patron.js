@@ -1,7 +1,6 @@
 'use strict';
 module.exports = function(sequelize, DataTypes) {
   var Patron = sequelize.define('Patron', {
-    id: DataTypes.INTEGER,
     first_name: DataTypes.STRING,
     last_name: DataTypes.STRING,
     address: DataTypes.STRING,
@@ -13,7 +12,8 @@ module.exports = function(sequelize, DataTypes) {
       associate: function(models) {
         // associations can be defined here
       }
-    }
+    },
+    timestamps: false
   });
   return Patron;
 };
