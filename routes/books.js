@@ -17,7 +17,7 @@ router.get('/', function(req, res, next) {
 //Overdue books aren't populating
 router.get('/overdue', function(req, res, next) {
   Loan.findAll({
-    include: [{ model: Book}],
+    include: [{ all: true }],
     where: { return_by: { $lt: new Date() }, returned_on: null }
   }).then(function(booklistings){
     res.render('partials/books', {
@@ -30,7 +30,7 @@ router.get('/overdue', function(req, res, next) {
 //Checked out books aren't populating
 router.get('/checked_out', function(req, res, next) {
   Loan.findAll({
-    include: [{ model: Book}],
+    include: [{ all: true }],
     where: { returned_on: null }
   }).then(function(booklistings){
     res.render('partials/books', {
