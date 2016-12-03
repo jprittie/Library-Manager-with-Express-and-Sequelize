@@ -1,16 +1,15 @@
-extends ../index
+extends ../layout
 
 block content
-
   h1 Books
   p
-    a.button (href='books/new') Create New Book
+    a.button(href='books/new') Create New Book
   p Filters
-    a (href='books/all') All |
-    a (href='/books/all/?filter=overdue') Overdue |
-    a (href='/books/all/?filter=checked_out') Checked Out
+    a(href='books/all') All |
+    a(href='/books/all/?filter=overdue') Overdue |
+    a(href='/books/all/?filter=checked_out') Checked Out
   table
-    th
+    thead
       tr
         th Title
         th Author
@@ -20,8 +19,7 @@ block content
         each book in books
           tr
             td
-              a(href='/books/' + book.id)
-                =book.title
-            td= book.author
-            td= book.genre
-            td= book.first_published
+              a(href='') #{book.title}
+            td #{book.title}
+            td #{book.genre}
+            td #{book.first_published}

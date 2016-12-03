@@ -1,4 +1,4 @@
-extends ../index
+extends ../layout
 
 block content
   h1 Books
@@ -19,16 +19,13 @@ block content
         th Action
     tbody
       each loan in loans
-      td
-        a(href='/books/' + loan.book.id)
-          =loan.book.title
-      td
-        a(href='/patrons/' + loan.patron.id)
-          =loan.patron.first_name
-          =loan.patron.last_name
-      td= loan.loaned_on
-      td= loan.return_by
-      td= loan.returned_on
-      td
-        if (loan.returned_on === null)
-          a.button(href='/loans/' + loan.id + '/return') Return Book
+        td
+          a(href='') #{loan.Book.title}
+        td
+          a(href='') #{loan.Patron.first_name} #{loan.Patron.last_name}
+        td #{loan.loaned_on}
+        td #{loan.return_by}
+        td #{loan.returned_on}
+        td
+          if (loan.returned_on === null)
+            a.button(href='') Return Book
