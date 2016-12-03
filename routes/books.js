@@ -17,12 +17,12 @@ router.get('/', function(req, res, next) {
 //Overdue books aren't populating
 router.get('/overdue', function(req, res, next) {
   Loan.findAll({
-    include: [{ all: true }],
+    include: [{ model: Book }],
     where: { return_by: { $lt: new Date() }, returned_on: null }
   }).then(function(booklistings){
-    res.render('partials/books', {
+    res.render('partials/overduebooks', {
       title: 'Overdue Books',
-      books: booklistings
+      loans: booklistings
     });
   });
 });
@@ -30,12 +30,12 @@ router.get('/overdue', function(req, res, next) {
 //Checked out books aren't populating
 router.get('/checked_out', function(req, res, next) {
   Loan.findAll({
-    include: [{ all: true }],
+    include: [{ model: Book }],
     where: { returned_on: null }
   }).then(function(booklistings){
-    res.render('partials/books', {
-      title: 'Overdue Books',
-      books: booklistings
+    res.render('partials/overduebooks', {
+      title: 'Checked-Out Books',
+      loans: booklistings
     });
   });
 });
