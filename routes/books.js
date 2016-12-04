@@ -14,7 +14,7 @@ router.get('/', function(req, res, next) {
   });
 });
 
-//Overdue books aren't populating
+// GET overdue books
 router.get('/overdue', function(req, res, next) {
   Loan.findAll({
     include: [{ model: Book }],
@@ -27,7 +27,7 @@ router.get('/overdue', function(req, res, next) {
   });
 });
 
-//Checked out books aren't populating
+// GET checked-out books
 router.get('/checked_out', function(req, res, next) {
   Loan.findAll({
     include: [{ model: Book }],
@@ -36,6 +36,27 @@ router.get('/checked_out', function(req, res, next) {
     res.render('partials/overduebooks', {
       title: 'Checked-Out Books',
       loans: booklistings
+    });
+  });
+});
+
+// GET book detail
+router.get('/:id', function(req, res, next) {
+  Book.findAll({
+    include: [{ all: true }],
+    where: { id: req.params.id }
+  }).then(function(booklisting){
+    var loanObject = JSON.parse(JSON.stringify(booklisting));
+    var loanArray = [];
+    for (var i=0; i<loanObject.length; i++){
+      loanArray.push(loanObject[i].loan);
+    }
+
+
+    res.render('partials/bookdetail', {
+      title: 'Book Details',
+      book: booklisting,
+      loans: loanArray
     });
   });
 });
