@@ -10,6 +10,8 @@ router.get('/', function(req, res, next) {
   Loan.findAll({
     include: [{ all: true }]
   }).then(function(loanlistings){
+    var loansdata = JSON.parse(JSON.stringify(loanlistings));
+    console.log(loansdata);
     res.render('partials/loans', {
       title: 'Loans',
       loans: loanlistings
@@ -23,7 +25,9 @@ router.get('/overdue', function(req, res, next) {
     include: [{ all: true }],
 		where: { return_by: { $lt: new Date() }, returned_on: null }
   }).then(function(loanlistings){
-    res.render('partials/loans', {
+    console.log(loanlistings);
+
+    res.render('partials/overdueloans', {
       title: 'Loans',
       loans: loanlistings
     });
@@ -37,7 +41,7 @@ router.get('/checked_out', function(req, res, next) {
     include: [{ all: true }],
   	where: { returned_on: null }
   }).then(function(loanlistings){
-    res.render('partials/loans', {
+    res.render('partials/checkedoutloans', {
       title: 'Loans',
       loans: loanlistings
     });
