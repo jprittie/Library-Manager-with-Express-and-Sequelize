@@ -100,12 +100,12 @@ router.get('/:id', function(req, res, next) {
       first_published: loansdata[0].first_published
     };
 
-    for (var i=0; i<loansdata[0].Loans.length; i++){
-      loansArray.push(loansdata[0].Loans[i]);
-    }
-
+    // for (var i=0; i<loansdata[0].Loans.length; i++){
+    //   loansArray.push(loansdata[0].Loans[i]);
+    // }
+    //
     // try without for loop
-    // loansArray.push(loansdata[0].Loans);
+    loansArray.push(loansdata[0].Loans);
 
     if (loansdata) {
       res.render('partials/bookdetail', {
