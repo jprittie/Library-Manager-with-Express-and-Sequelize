@@ -1,16 +1,64 @@
 'use strict';
 module.exports = function(sequelize, DataTypes) {
   var Patron = sequelize.define('Patron', {
-    first_name: DataTypes.STRING,
-    last_name: DataTypes.STRING,
-    address: DataTypes.STRING,
-    email: DataTypes.STRING,
-    library_id: DataTypes.STRING,
-    zip_code: DataTypes.INTEGER
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true
+    },
+    first_name: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          msg: "Please enter a first name"
+        }
+      }
+    },
+    last_name: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          msg: "Please enter a last name"
+        }
+      }
+    },
+    address: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          msg: "Please enter an address"
+        }
+      }
+    },
+    email: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          msg: "Please enter an email address"
+        },
+        isEmail: {
+          msg: "Please enter a valid email"
+        }
+      }
+    },
+    library_id: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          msg: "Please enter a library ID"
+        }
+      }
+    },
+    zip_code: {
+      type: DataTypes.INTEGER,
+      validate: {
+        notEmpty: {
+          msg: "Please enter a zip code"
+        }
+      }
+    }
   }, {
     classMethods: {
       associate: function(models) {
-        // associations can be defined here
         Patron.hasMany(models.Loan, {foreignKey: 'patron_id'});
       }
     },

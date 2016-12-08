@@ -1,0 +1,23 @@
+extends ../layout
+
+block content
+  h1 New Loan
+  form(action='/loans/new', '?_method=PUT', method='post')
+    p
+      label(for='book_id') Book
+      select#book_id(name='book_id')
+        each book in books
+          option(value=book.id) Book #{book.title}
+    p
+      label(for='patron_id') Author
+      select#patron_id(name='patron_id')
+        each patron in patrons
+          option(value=patron.id) Patron #{patron.first_name} #{patron.last_name}
+    p
+      label(for='loaned_on') Genre
+      input#loaned_on(type='text' name='loaned_on' value=loaned_on)
+    p
+      label(for='return_by') First Published
+      input#return_by(type='text' name='return_by' value=return_by)
+    p
+      input(type='submit' value='Create New Loan' href='/loans/new')
