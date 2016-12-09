@@ -88,6 +88,7 @@ router.get('/:id', function(req, res, next) {
     where: { id: req.params.id }
   })
   .then(function(bookdetails){
+
     var loansdata = JSON.parse(JSON.stringify(bookdetails));
     var bookObject = {};
     var loansArray = [];
@@ -100,19 +101,14 @@ router.get('/:id', function(req, res, next) {
       first_published: loansdata[0].first_published
     };
 
-    // for (var i=0; i<loansdata[0].Loans.length; i++){
-    //   loansArray.push(loansdata[0].Loans[i]);
-    // }
-    //
-    // try without for loop
-    loansArray.push(loansdata[0].Loans);
+    // loansArray.push(loansdata[0].Loans);
 
-    if (loansdata) {
+    if (bookdetails) {
       res.render('partials/bookdetail', {
         title: 'Book Details',
         book: bookObject,
-        loans: loansArray
-      })
+        loans: loansdata[0].Loans
+      });
     } else {
       res.sendStatus(404);
     }
