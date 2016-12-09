@@ -2,7 +2,7 @@ extends ../layout
 
 block content
   h1 Patron: #{patron.first_name} #{patron.last_name}
-  form(action='/books/' + book.id + '?_method=PUT', method='post')
+  form(action='/patrons/' + patron.id + '?_method=PUT', method='post')
     p
       label(for='first_name') First Name
       input#first_name(type='text' name='first_name' value=patron.first_name)
@@ -25,7 +25,7 @@ block content
       input(type='submit' value='Update')
   h2 Loan History
   p
-    #{alldata}
+
   table
     thead
       tr
@@ -38,6 +38,9 @@ block content
     tbody
       each loan in loans
         tr
-          td #{book.title}
-          td
+          td  
+          td #{patron.first_name} #{patron.last_name}
           td #{loan.loaned_on}
+          td #{loan.return_by}
+          td #{loan.returned_on}
+          td
