@@ -3,10 +3,10 @@
 'use strict';
 module.exports = function(sequelize, DataTypes) {
   var Loan = sequelize.define('Loan', {
-    id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true
-    },
+    // id: {
+    //     type: DataTypes.INTEGER,
+    //     primaryKey: true
+    // },
     book_id: {
       type: DataTypes.INTEGER,
       allowNull: false
