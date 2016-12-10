@@ -24,30 +24,30 @@ router.get('/:id', function(req, res, next) {
   })
   .then(function(patronlistings){
     var patrondetails = JSON.parse(JSON.stringify(patronlistings));
-    console.log(patrondetails);
-    console.log("patrondetails[0].Loans[0] is " + patrondetails[0].Loans[0]);
-    console.log("patrondetails[0].Loans[0].return_by is " + patrondetails[0].Loans[0].return_by);
-    var loanArray = [];
-    loanArray.push(patrondetails[0].Loans);
-
-    console.log("loanArray[0] is " + loanArray[0]);
-    console.log("loanArray[0].Loans is " + loanArray[0].Loans);
-
-    for (var i=0; i<loanArray.length; i++) {
-      console.log("loanArray[i] is " + loanArray[i]);
-    }
 
     if (patrondetails) {
       res.render('partials/patrondetail', {
         title: 'Patron Details',
         patron: patrondetails[0],
-        loans: loanArray
+        loans: patrondetails[0].Loans
       })
     } else {
       res.sendStatus(404);
     }
   }).catch(function(err){
-     res.send(500);
+     res.sendStatus(500);
+  });
+});
+
+
+// PUT or update patron details form
+router.put('/:id', function(req, res, next) {
+  Patron.findById(req.params.id).then(function(patron){
+    return patron.update(req.body);
+  }).then(function(patron){
+    res.redirect('/patrons/' + patron.id);
+  }).catch(function(err){
+    res.sendStatus(500);
   });
 });
 
