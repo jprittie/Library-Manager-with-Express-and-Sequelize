@@ -15,6 +15,24 @@ router.get('/', function(req, res, next) {
   });
 });
 
+// GET new patron form
+router.get('/new', function(req, res, next) {
+  res.render('partials/newpatron', {
+    title: 'Create New Patron'
+  }).catch(function(err){
+    res.sendStatus(500);
+  });
+});
+
+// POST new patron
+router.post('/new', function(req, res, next) {
+  Patron.create(req.body)
+  .then(function(patron){
+    res.redirect('/patrons/');
+  }).catch(function(err){
+    res.sendStatus(500);
+  });
+});
 
 // GET patron details
 router.get('/:id', function(req, res, next) {
@@ -50,5 +68,8 @@ router.put('/:id', function(req, res, next) {
     res.sendStatus(500);
   });
 });
+
+
+
 
 module.exports = router;
