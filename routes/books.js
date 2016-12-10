@@ -72,7 +72,11 @@ router.post('/new', function(req, res, next) {
   .then(function(book){
     res.redirect('/books/');
   }).catch(function(err){
-    res.sendStatus(500);
+    if (err.name === 'SequelizeValidationError') {
+      console.log("Validation error");
+    } else {
+      res.sendStatus(500);
+    }
   });
 });
 
