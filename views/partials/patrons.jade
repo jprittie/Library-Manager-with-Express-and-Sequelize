@@ -1,14 +1,10 @@
 extends ../layout
 
 block content
-
   h1 Patrons
   p
-    a.button(href='books/new') Create New Patron
-  p Filters
-    a(href='books/all') All |
-    a(href='/books/all/?filter=overdue') Overdue |
-    a(href='/books/all/?filter=checked_out') Checked Out
+    a.button(href='patrons/new') Create New Patron
+
   table
     thead
       tr
