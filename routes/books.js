@@ -68,12 +68,9 @@ router.get('/new', function(req, res, next) {
 
 // POST new book
 router.post('/new', function(req, res, next) {
-  Book.create(req.body).then(function(book){
-    if (book) {
-      res.redirect('/books/' + book.id)
-    } else {
-      res.sendStatus(404);
-    }
+  Book.create(req.body)
+  .then(function(book){
+    res.redirect('/books/');
   }).catch(function(err){
     res.sendStatus(500);
   });
@@ -90,29 +87,26 @@ router.get('/:id', function(req, res, next) {
   .then(function(bookdetails){
 
     var loansdata = JSON.parse(JSON.stringify(bookdetails));
-    var bookObject = {};
-    var loansArray = [];
+    // var bookObject = {};
 
-    bookObject = {
-      id: loansdata[0].id,
-      title: loansdata[0].title,
-      author: loansdata[0].author,
-      genre: loansdata[0].genre,
-      first_published: loansdata[0].first_published
-    };
-
-    // loansArray.push(loansdata[0].Loans);
+    // bookObject = {
+    //   id: loansdata[0].id,
+    //   title: loansdata[0].title,
+    //   author: loansdata[0].author,
+    //   genre: loansdata[0].genre,
+    //   first_published: loansdata[0].first_published
+    // };
 
     if (bookdetails) {
       res.render('partials/bookdetail', {
         title: 'Book Details',
-        book: bookObject,
+        book: loansdata[0],
+        // book: bookObject,
         loans: loansdata[0].Loans
       });
     } else {
       res.sendStatus(404);
     }
-
 
   }).catch(function(err){
      res.send(500);
@@ -121,18 +115,12 @@ router.get('/:id', function(req, res, next) {
 
 
 
-// PUT or update book details
-// router.get('/:id/update', function(req, res, next) {
-//   var updatebook = find(req.params.id);
-//   res.render('partials/bookdetail', {book: updatebook, title: 'Update Book Details'})
-// });
-
 // PUT or update book details form
 router.put('/:id', function(req, res, next) {
   Book.findById(req.params.id).then(function(book){
     return book.update(req.body);
   }).then(function(book){
-  // res.redirect('/books/' + book.id);
+    res.redirect('/books/' + book.id);
   }).catch(function(err){
     res.send(500);
   });
