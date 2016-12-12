@@ -3,17 +3,18 @@ extends ../layout
 block content
   h1 Patron: Return Book
   p
-    strong Book Title:
+    strong Book Title: #{loan.Book.title}
   p
-    strong Loaned By:
+    strong Loaned By: #{loan.Patron.first_name} #{loan.Patron.last_name}
   p
-    strong Loaned On:
+    strong Loaned On: #{loan.loaned_on}
   p
-    strong Return By:
-    
-  form(action='/loans/return', '?_method=PUT', method='post')
+    strong Return By: #{loan.return_by}
+
+  form('?_method=PUT', method='post')
     p
-      label(for='returned_on') Returned On
-      input#returned_on(type='text' name='returned_on' value='')
+      label(for='returned_on')
+      strong Returned On:
+      input#returned_on(type='text' name='returned_on' value=returndate)
     p
-      input(type='submit' value='Return Book' href='/loans/return')
+      input(type='submit' value='Return Book')
