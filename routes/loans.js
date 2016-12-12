@@ -48,4 +48,35 @@ router.get('/checked_out', function(req, res, next) {
   });
 });
 
+
+
+// Get return book form
+router.get('/return/:id', function(req, res, next) {
+  Loan.findById({
+    include: [{ all: true }],
+  })
+  .then(function(loandetails){
+    res.render('partials/returnbook', {
+      title: 'Return Book',
+      loan: loandetails,
+      returndate: new Date()
+    });
+  }).catch(function(err){
+    res.sendStatus(500);
+  });
+});
+
+
+// PUT or update return book
+router.put('/return/:id', function(req, res, next) {
+  Loan.findById(req.params.id).then(function(loan){
+    return loan.update(req.body);
+  }).then(function(book){
+    res.redirect('/loans/');
+  }).catch(function(err){
+    res.sendStatus(500);
+  });
+});
+
+
 module.exports = router;
