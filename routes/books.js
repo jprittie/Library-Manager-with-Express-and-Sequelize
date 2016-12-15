@@ -117,7 +117,7 @@ router.get('/:id', function(req, res, next) {
   });
 });
 
-
+//could use update initially here?
 
 // PUT or update book details form
 router.put('/:id', function(req, res, next) {
