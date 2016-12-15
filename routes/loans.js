@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var moment = require('moment');
 var Book = require("../models").Book;
 var Loan = require("../models").Loan;
 var Patron = require("../models").Patron;
@@ -50,16 +51,16 @@ router.get('/checked_out', function(req, res, next) {
 
 
 
-// Get return book form
+// Get return book form and details via loan id
 router.get('/return/:id', function(req, res, next) {
-  Loan.findById({
+  Loan.findById((req.params.id), {
     include: [{ all: true }],
   })
   .then(function(loandetails){
+    loandetails.returned_on = moment().format('YYYY-MM-DD');
     res.render('partials/returnbook', {
       title: 'Return Book',
-      loan: loandetails,
-      returndate: new Date()
+      loan: loandetails
     });
   }).catch(function(err){
     res.sendStatus(500);
@@ -67,11 +68,12 @@ router.get('/return/:id', function(req, res, next) {
 });
 
 
-// PUT or update return book
+// PUT or update return book using loan id
 router.put('/return/:id', function(req, res, next) {
   Loan.findById(req.params.id).then(function(loan){
+    // loan.returned_on: moment().format('YYYY-MM-DD');
     return loan.update(req.body);
-  }).then(function(book){
+  }).then(function(loan){
     res.redirect('/loans/');
   }).catch(function(err){
     res.sendStatus(500);
