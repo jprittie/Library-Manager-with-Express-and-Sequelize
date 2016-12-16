@@ -6,7 +6,7 @@ var Patron = require("../models").Patron;
 
 /* GET books page. */
 router.get('/', function(req, res, next) {
-  Book.findAll().then(function(booklistings){
+  Book.findAll({order: 'title'}).then(function(booklistings){
     if(booklistings){
       res.render('partials/books', {
         title: 'Books',
@@ -24,7 +24,8 @@ router.get('/', function(req, res, next) {
 router.get('/overdue', function(req, res, next) {
   Loan.findAll({
     include: [{ model: Book }],
-    where: { return_by: { $lt: new Date() }, returned_on: null }
+    where: { return_by: { $lt: new Date() }, returned_on: null },
+    order: 'title'
   }).then(function(booklistings){
     if(booklistings){
       res.render('partials/overduebooks', {
@@ -43,7 +44,8 @@ router.get('/overdue', function(req, res, next) {
 router.get('/checked_out', function(req, res, next) {
   Loan.findAll({
     include: [{ model: Book }],
-    where: { returned_on: null }
+    where: { returned_on: null },
+    order: 'title'
   }).then(function(booklistings){
     if(booklistings){
       res.render('partials/checkedoutbooks', {
