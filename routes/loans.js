@@ -25,14 +25,16 @@ router.get('/', function(req, res, next) {
 router.get('/overdue', function(req, res, next) {
   Loan.findAll({
     include: [{ all: true }],
-		where: { return_by: { $lt: new Date() }, returned_on: null }
+		where: { return_by: { $lt: moment().format('YYYY-MM-DD').toString() }, returned_on: null }
   }).then(function(loanlistings){
-    console.log(loanlistings);
-
-    res.render('partials/overdueloans', {
-      title: 'Loans',
-      loans: loanlistings
-    });
+    var loansdata = JSON.parse(JSON.stringify(loanlistings));
+    console.log(loansdata);
+      res.render('partials/overdueloans', {
+        title: 'Overdue Loans',
+        loans: loansdata
+      });
+  }).catch(function(error) {
+    res.sendStatus(500);
   });
 });
 
@@ -44,9 +46,11 @@ router.get('/checked_out', function(req, res, next) {
   	where: { returned_on: null }
   }).then(function(loanlistings){
     res.render('partials/checkedoutloans', {
-      title: 'Loans',
+      title: 'Checked-Out Loans',
       loans: loanlistings
     });
+  }).catch(function(error) {
+    res.sendStatus(500);
   });
 });
 
@@ -72,7 +76,6 @@ router.get('/return/:id', function(req, res, next) {
 // PUT or update return book using loan id
 router.put('/return/:id', function(req, res, next) {
   Loan.findById(req.params.id).then(function(loan){
-    // loan.returned_on: moment().format('YYYY-MM-DD');
     return loan.update(req.body);
   }).then(function(loan){
     res.redirect('/loans/');
@@ -112,6 +115,13 @@ router.get('/new', function(req, res, next) {
 });
 
 // PUT new loan form
-// use Loan.create; that should generate a new ID
+router.post('/new', function(req, res, next) {
+  Loan.create(req.body)
+  .then(function(loan){
+    res.redirect('/loans/');
+  }).catch(function(err){
+    res.sendStatus(500);
+  });
+});
 
 module.exports = router;
