@@ -9,7 +9,8 @@ var Patron = require("../models").Patron;
 /* GET loans page */
 router.get('/', function(req, res, next) {
   Loan.findAll({
-    include: [{ all: true }]
+    include: [{ all: true }],
+    order: 'Book.title'
   }).then(function(loanlistings){
     var loansdata = JSON.parse(JSON.stringify(loanlistings));
     console.log(loansdata);
@@ -80,5 +81,37 @@ router.put('/return/:id', function(req, res, next) {
   });
 });
 
+
+// GET new loan form
+router.get('/new', function(req, res, next) {
+  var bookdetails;
+  var patrondetails;
+
+  Book.findAll({attributes: ['id', 'title'], order: 'title'}).then(function(results){
+    bookdetails = results;
+  }).then(
+    Patron.findAll({
+      attributes: ['id', 'first_name', 'last_name'],
+      order: 'last_name'
+    }).then(function(results){
+    console.log("results is " + results);
+    patrondetails = results;
+    }).then(function(){
+      res.render('partials/newloan', {
+        title: 'Create New Loan',
+        books: bookdetails,
+        patrons: patrondetails,
+        loaned_on: moment().format('YYYY-MM-DD'),
+        return_by: moment().add(7, 'days').format('YYYY-MM-DD')
+      });
+    }).catch(function(err){
+      console.log(err);
+      res.sendStatus(500);
+    })
+  );
+});
+
+// PUT new loan form
+// use Loan.create; that should generate a new ID
 
 module.exports = router;
