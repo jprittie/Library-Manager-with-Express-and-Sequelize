@@ -68,19 +68,6 @@ router.get('/new', function(req, res, next) {
   });
 });
 
-// // POST new book
-// router.post('/new', function(req, res, next) {
-//   Book.create(req.body)
-//   .then(function(book){
-//     res.redirect('/books/');
-//   }).catch(function(err){
-//     if (err.name === 'SequelizeValidationError') {
-//       console.log("Validation error");
-//     } else {
-//       res.sendStatus(500);
-//     }
-//   });
-// });
 
 // POST new book
 router.post('/new', function(req, res, next) {
@@ -90,7 +77,6 @@ router.post('/new', function(req, res, next) {
   }).catch(function(err){
     if (err.name === 'SequelizeValidationError') {
       console.log("Validation error");
-      console.log(err.errors.length);
 
       // loop over err messages
       var errMessages = [];
@@ -98,9 +84,14 @@ router.post('/new', function(req, res, next) {
         errMessages[i] = err.errors[i].message;
       }
 
+      // keep existing fields from clearing out
+      // if (req.body.title) then set input value to req.body.title
+      // if no error, jade template includes regular form
+      // I don't want it to disable submit; I just want it to re-render with preserved req.body
 
       res.render('partials/newbook', {
         title: 'Create New Book',
+        booktitle: req.body.title,
         errors: errMessages
       });
 
@@ -110,12 +101,6 @@ router.post('/new', function(req, res, next) {
     }
   });
 });
-
-// if no err, execute query against database
-// but, it won't know there's a validation error until you try to execute query
-// if there's an error when you run that query, send to next(err)?
-// if SequelizeValidationError, then re-render, showing errors?
-// if there's a different kind of error, send to error handler?
 
 
 
