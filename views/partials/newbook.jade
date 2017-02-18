@@ -17,3 +17,7 @@ block content
       input#first_published(type='text' name='first_published')
     p
       input(type='submit' value='Create New Book')
+
+
+  if errors
+    include ./error

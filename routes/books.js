@@ -64,9 +64,23 @@ router.get('/checked_out', function(req, res, next) {
 // GET new book form
 router.get('/new', function(req, res, next) {
   res.render('partials/newbook', {
-    title: 'Create New Book'
+    title: 'Create New Book',
   });
 });
+
+// // POST new book
+// router.post('/new', function(req, res, next) {
+//   Book.create(req.body)
+//   .then(function(book){
+//     res.redirect('/books/');
+//   }).catch(function(err){
+//     if (err.name === 'SequelizeValidationError') {
+//       console.log("Validation error");
+//     } else {
+//       res.sendStatus(500);
+//     }
+//   });
+// });
 
 // POST new book
 router.post('/new', function(req, res, next) {
@@ -76,11 +90,33 @@ router.post('/new', function(req, res, next) {
   }).catch(function(err){
     if (err.name === 'SequelizeValidationError') {
       console.log("Validation error");
+      console.log(err.errors.length);
+
+      // loop over err messages
+      var errMessages = [];
+      for (i=0; i<err.errors.length; i++) {
+        errMessages[i] = err.errors[i].message;
+      }
+
+
+      res.render('partials/newbook', {
+        title: 'Create New Book',
+        errors: errMessages
+      });
+
     } else {
       res.sendStatus(500);
+      next(err);
     }
   });
 });
+
+// if no err, execute query against database
+// but, it won't know there's a validation error until you try to execute query
+// if there's an error when you run that query, send to next(err)?
+// if SequelizeValidationError, then re-render, showing errors?
+// if there's a different kind of error, send to error handler?
+
 
 
 
