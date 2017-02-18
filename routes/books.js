@@ -64,7 +64,7 @@ router.get('/checked_out', function(req, res, next) {
 // GET new book form
 router.get('/new', function(req, res, next) {
   res.render('partials/newbook', {
-    title: 'Create New Book',
+    title: 'Create New Book'
   });
 });
 
@@ -84,14 +84,14 @@ router.post('/new', function(req, res, next) {
         errMessages[i] = err.errors[i].message;
       }
 
-      // keep existing fields from clearing out
-      // if (req.body.title) then set input value to req.body.title
-      // if no error, jade template includes regular form
-      // I don't want it to disable submit; I just want it to re-render with preserved req.body
+      /* I want to keep existing fields from clearing out on submit, so I have added logic in the newbook template to check which properties of req.body exist. I'm making req.body available to the template via the following object */
 
       res.render('partials/newbook', {
         title: 'Create New Book',
-        booktitle: req.body.title,
+        bookTitle: req.body.title,
+        bookAuthor: req.body.author,
+        bookGenre: req.body.genre,
+        bookPublished: req.body.first_published,
         errors: errMessages
       });
 
