@@ -6,14 +6,14 @@ var Loan = require("../models").Loan;
 var Patron = require("../models").Patron;
 
 
-/* GET loans page */
+// GET loans page
 router.get('/', function(req, res, next) {
   Loan.findAll({
     include: [{ all: true }],
     order: 'Book.title'
   }).then(function(loanlistings){
     var loansdata = JSON.parse(JSON.stringify(loanlistings));
-    console.log(loansdata);
+    // console.log(loansdata);
     res.render('partials/loans', {
       title: 'Loans',
       loans: loanlistings
@@ -21,7 +21,7 @@ router.get('/', function(req, res, next) {
   });
 });
 
-/* GET overdue loans */
+// GET overdue loans
 router.get('/overdue', function(req, res, next) {
   Loan.findAll({
     include: [{ all: true }],
@@ -38,8 +38,7 @@ router.get('/overdue', function(req, res, next) {
   });
 });
 
-/* GET checked-out loans */
-// But what's the difference between all loans and checked-out loans?
+// GET checked-out loans
 router.get('/checked_out', function(req, res, next) {
   Loan.findAll({
     include: [{ all: true }],
@@ -97,7 +96,7 @@ router.get('/new', function(req, res, next) {
       attributes: ['id', 'first_name', 'last_name'],
       order: 'last_name'
     }).then(function(results){
-    console.log("results is " + results);
+    // console.log("results is " + results);
     patrondetails = results;
     }).then(function(){
       res.render('partials/newloan', {

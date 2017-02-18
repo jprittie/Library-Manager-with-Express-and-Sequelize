@@ -4,7 +4,7 @@ var Book = require("../models").Book;
 var Loan = require("../models").Loan;
 var Patron = require("../models").Patron;
 
-/* GET books page. */
+// GET books page
 router.get('/', function(req, res, next) {
   Book.findAll({order: 'title'}).then(function(booklistings){
     if(booklistings){
@@ -119,7 +119,6 @@ router.get('/:id', function(req, res, next) {
   });
 });
 
-//could use update initially here?
 
 // PUT or update book details form
 router.put('/:id', function(req, res, next) {
