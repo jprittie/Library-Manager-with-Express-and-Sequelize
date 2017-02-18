@@ -3,9 +3,15 @@ extends ../layout
 block content
   h1 New Book
   form(method='post')
-    p
-      label(for='title') Title
-      input#title(type='text' name='title')
+    - if (booktitle) {
+      p
+        label(for='title') Title
+        input#title(type='text' name='title' value='#{booktitle}')
+    - } else {
+      p
+        label(for='title') Title
+        input#title(type='text' name='title')
+    - }
     p
       label(for='author') Author
       input#author(type='text' name='author')
@@ -16,7 +22,7 @@ block content
       label(for='first_published') First Published
       input#first_published(type='text' name='first_published')
     p
-      input(type='submit' value='Create New Book')
+      input#button(type='submit' value='Create New Book')
 
 
   if errors
