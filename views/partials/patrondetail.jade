@@ -23,6 +23,8 @@ block content
       input#zip_code(type='text' name='zip_code' value=patron.zip_code)
     p
       input(type='submit' value='Update')
+  if errors
+    include ./error
   h2 Loan History
   p
 
