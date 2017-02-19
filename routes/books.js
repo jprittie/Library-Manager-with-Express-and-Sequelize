@@ -1,3 +1,5 @@
+'use strict';
+
 var express = require('express');
 var router = express.Router();
 var Book = require("../models").Book;
@@ -35,7 +37,7 @@ router.get('/overdue', function(req, res, next) {
       });
     } else {
       err.status == 404;
-      return next (err);
+      return next(err);
     }
   }).catch(function(err){
     return next(err);
@@ -56,10 +58,10 @@ router.get('/checked_out', function(req, res, next) {
       });
     } else {
       err.status == 404;
-      return next (err);
+      return next(err);
     }
   }).catch(function(err){
-    return next(err)
+    return next(err);
   });
 });
 
@@ -69,6 +71,7 @@ router.get('/new', function(req, res, next) {
   res.render('partials/newbook', {
     title: 'Create New Book'
   });
+  if (err) return next(err);
 });
 
 
@@ -123,7 +126,7 @@ router.get('/:id', function(req, res, next) {
       });
     } else {
       err.status == 404;
-      return next (err);
+      return next(err);
     }
 
   }).catch(function(err){
@@ -164,7 +167,7 @@ router.put('/:id', function(req, res, next) {
           });
         } else {
           err.status == 404;
-          return next (err);
+          return next(err);
         }
 
       }).catch(function(err){
