@@ -21,3 +21,6 @@ block content
       input#return_by(type='text' name='return_by' value=return_by)
     p
       input(type='submit' value='Create New Loan')
+
+  if errors
+    include ./error

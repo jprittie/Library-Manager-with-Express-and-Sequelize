@@ -79,8 +79,30 @@ router.put('/return/:id', function(req, res, next) {
   }).then(function(loan){
     res.redirect('/loans/');
   }).catch(function(err){
-    res.sendStatus(500);
-  });
+
+    if (err.name == 'SequelizeValidationError') {
+
+      console.log("Validation error");
+
+      Loan.findById((req.params.id), {
+        include: [{ all: true }],
+      })
+      .then(function(loandetails){
+        // loop over err messages
+        var errMessages = [];
+        for (i=0; i<err.errors.length; i++) {
+          errMessages[i] = err.errors[i].message;
+        }
+        loandetails.returned_on = moment().format('YYYY-MM-DD');
+        res.render('partials/returnbook', {
+          title: 'Return Book',
+          loan: loandetails,
+          errors: errMessages
+        });
+      })
+    } // ends if
+
+  }); // ends catch
 });
 
 
@@ -89,15 +111,20 @@ router.get('/new', function(req, res, next) {
   var bookdetails;
   var patrondetails;
 
-  Book.findAll({attributes: ['id', 'title'], order: 'title'}).then(function(results){
+  Book.findAll({
+    attributes: ['id', 'title'],
+    order: 'title',
+    // include: [{ model: Loan }]
+  }).then(function(results){
+    console.log(results);
+    // don't let same book be borrowed more than once
     bookdetails = results;
   }).then(
     Patron.findAll({
       attributes: ['id', 'first_name', 'last_name'],
       order: 'last_name'
     }).then(function(results){
-    // console.log("results is " + results);
-    patrondetails = results;
+      patrondetails = results;
     }).then(function(){
       res.render('partials/newloan', {
         title: 'Create New Loan',
@@ -107,20 +134,57 @@ router.get('/new', function(req, res, next) {
         return_by: moment().add(7, 'days').format('YYYY-MM-DD')
       });
     }).catch(function(err){
-      console.log(err);
       res.sendStatus(500);
+      next(err);
     })
   );
 });
 
-// PUT new loan form
+// POST new loan form
 router.post('/new', function(req, res, next) {
   Loan.create(req.body)
   .then(function(loan){
     res.redirect('/loans/');
   }).catch(function(err){
+
+    if (err.name == 'SequelizeValidationError') {
+
+      console.log("Validation error");
+
+      // loop over err messages
+      var errMessages = [];
+      for (i=0; i<err.errors.length; i++) {
+        errMessages[i] = err.errors[i].message;
+      }
+
+      var bookdetails;
+      var patrondetails;
+
+      Book.findAll({attributes: ['id', 'title'], order: 'title'}).then(function(results){
+        bookdetails = results;
+      }).then(
+        Patron.findAll({
+          attributes: ['id', 'first_name', 'last_name'],
+          order: 'last_name'
+        }).then(function(results){
+        patrondetails = results;
+        }).then(function(){
+          res.render('partials/newloan', {
+            title: 'Create New Loan',
+            books: bookdetails,
+            patrons: patrondetails,
+            loaned_on: moment().format('YYYY-MM-DD'),
+            return_by: moment().add(7, 'days').format('YYYY-MM-DD'),
+            errors: errMessages
+          });
+        }) // ends then
+      ) // ends then
+    } // ends if
+
+  }).catch(function(err){
     res.sendStatus(500);
+    next(err);
   });
-});
+}); // ends POST
 
 module.exports = router;
