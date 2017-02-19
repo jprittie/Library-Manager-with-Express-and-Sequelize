@@ -33,6 +33,11 @@ module.exports = function(sequelize, DataTypes) {
     },
     returned_on: {
       type: DataTypes.DATEONLY,
+      validate: {
+        isDate: {
+          msg: "Please enter a returned-on date"
+        }
+      }
     }
   }, {
     classMethods: {
