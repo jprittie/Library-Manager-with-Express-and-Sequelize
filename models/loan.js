@@ -1,5 +1,3 @@
-// MUST CHECK VALIDATON i.e. allowNull and isDate vs. notEmpty
-
 'use strict';
 module.exports = function(sequelize, DataTypes) {
   var Loan = sequelize.define('Loan', {
