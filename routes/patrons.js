@@ -1,3 +1,5 @@
+'use strict';
+
 var express = require('express');
 var router = express.Router();
 var Book = require("../models").Book;
@@ -8,10 +10,17 @@ var Patron = require("../models").Patron;
 // GET patrons page
 router.get('/', function(req, res, next) {
   Patron.findAll({order: 'last_name'}).then(function(patronlistings){
-    res.render('partials/patrons', {
-      title: 'Patrons',
-      patrons: patronlistings
-    });
+    if (patronlistings) {
+      res.render('partials/patrons', {
+        title: 'Patrons',
+        patrons: patronlistings
+      });
+     } else {
+        err.status == 404;
+        return next(err);
+      }
+  }).catch(function(err){
+    return next(err);
   });
 });
 
@@ -19,10 +28,8 @@ router.get('/', function(req, res, next) {
 router.get('/new', function(req, res, next) {
   res.render('partials/newpatron', {
     title: 'Create New Patron'
-  }).catch(function(err){
-    res.sendStatus(500);
-    next(err);
-  });
+  })
+  if (err) return next(err);
 });
 
 // POST new patron
@@ -31,8 +38,8 @@ router.post('/new', function(req, res, next) {
   .then(function(patron){
     res.redirect('/patrons/');
   }).catch(function(err){
+    // if there's a validation error, re-render page with errors
     if (err.name == 'SequelizeValidationError') {
-      console.log("Validation error");
 
       // loop over err messages
       var errMessages = [];
@@ -51,11 +58,11 @@ router.post('/new', function(req, res, next) {
         patronZipCode: req.body.zip_code,
         errors: errMessages
       })
-    } // ends if
-  }).catch(function(err){
-    res.sendStatus(500);
-    next(err);
-  });
+    } else {
+      // else send to middleware error handler
+      return next(err);
+    }
+  }); // ends catch
 }); // ends POST
 
 // GET patron details
@@ -74,10 +81,11 @@ router.get('/:id', function(req, res, next) {
         loans: patrondetails[0].Loans
       })
     } else {
-      res.sendStatus(404);
+      err.status == 404;
+      return next(err);
     }
   }).catch(function(err){
-     res.sendStatus(500);
+    return next(err);
   });
 });
 
@@ -89,9 +97,8 @@ router.put('/:id', function(req, res, next) {
   }).then(function(patron){
     res.redirect('/patrons/' + patron.id);
   }).catch(function(err){
-
+    // if there's a validation error, re-render page with errors
     if (err.name == 'SequelizeValidationError') {
-      console.log("Validation error");
 
       Patron.findAll({
         include: [{ model: Loan, include: [{ model: Book }] }],
@@ -112,14 +119,12 @@ router.put('/:id', function(req, res, next) {
             loans: patrondetails[0].Loans,
             errors: errMessages
           })
-        } else {
-          res.sendStatus(404);
-        }
       }); // ends then
-    } // ends if
-  }).catch(function(err){
-     res.sendStatus(500);
-  });
+    } else {
+      // else send to middleware error handler
+      return next(err);
+    }
+  }); // ends catch
 });
 
 
