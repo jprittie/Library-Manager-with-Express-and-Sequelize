@@ -21,6 +21,7 @@ router.get('/new', function(req, res, next) {
     title: 'Create New Patron'
   }).catch(function(err){
     res.sendStatus(500);
+    next(err);
   });
 });
 
@@ -30,9 +31,32 @@ router.post('/new', function(req, res, next) {
   .then(function(patron){
     res.redirect('/patrons/');
   }).catch(function(err){
+    if (err.name == 'SequelizeValidationError') {
+      console.log("Validation error");
+
+      // loop over err messages
+      var errMessages = [];
+      for (i=0; i<err.errors.length; i++) {
+        errMessages[i] = err.errors[i].message;
+      }
+
+      /* I want to keep existing fields from clearing out on submit (i.e., so that if there's a validation error the librarian doesn't have to re-enter all the data), so I have added logic in the newpatron template to check which properties of req.body exist. I'm making req.body available to the template via the following object */
+      res.render('partials/newpatron', {
+        title: 'Create New Patron',
+        patronFirstName: req.body.first_name,
+        patronLastName: req.body.last_name,
+        patronAddress: req.body.address,
+        patronEmail: req.body.email,
+        patronLibraryId: req.body.library_id,
+        patronZipCode: req.body.zip_code,
+        errors: errMessages
+      })
+    } // ends if
+  }).catch(function(err){
     res.sendStatus(500);
+    next(err);
   });
-});
+}); // ends POST
 
 // GET patron details
 router.get('/:id', function(req, res, next) {
@@ -65,7 +89,36 @@ router.put('/:id', function(req, res, next) {
   }).then(function(patron){
     res.redirect('/patrons/' + patron.id);
   }).catch(function(err){
-    res.sendStatus(500);
+
+    if (err.name == 'SequelizeValidationError') {
+      console.log("Validation error");
+
+      Patron.findAll({
+        include: [{ model: Loan, include: [{ model: Book }] }],
+        where: { id: req.params.id }
+      })
+      .then(function(patronlistings){
+        var patrondetails = JSON.parse(JSON.stringify(patronlistings));
+        // loop over err messages
+        var errMessages = [];
+        for (i=0; i<err.errors.length; i++) {
+          errMessages[i] = err.errors[i].message;
+        }
+
+        if (patrondetails) {
+          res.render('partials/patrondetail', {
+            title: 'Patron Details',
+            patron: patrondetails[0],
+            loans: patrondetails[0].Loans,
+            errors: errMessages
+          })
+        } else {
+          res.sendStatus(404);
+        }
+      }); // ends then
+    } // ends if
+  }).catch(function(err){
+     res.sendStatus(500);
   });
 });
 
