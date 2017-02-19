@@ -40,8 +40,10 @@ block content
     tbody
       each loan in loans
         tr
-          td #{loan.Book.title}
-          td #{patron.first_name} #{patron.last_name}
+          td
+            a(href='/books/' + loan.Book.id) #{loan.Book.title}
+          td
+            a(href='/patrons/' + patron.id) #{patron.first_name} #{patron.last_name}
           td #{loan.loaned_on}
           td #{loan.return_by}
           td #{loan.returned_on}
