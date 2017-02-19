@@ -17,6 +17,8 @@ block content
       input#first_published(type='text' name='first_published' value=book.first_published)
     p
       input(type='submit' value='Update')
+  if errors
+    include ./error
   h2 Loan History
   p
   table
@@ -39,4 +41,5 @@ block content
           td #{loan.return_by}
           td #{loan.returned_on}
           td
-            a.button(href='/loans/' + loan.id + '/return') Return Book
+            if (loan.returned_on === null)
+              a.button(href='loans/return/' + loan.id) Return Book
