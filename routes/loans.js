@@ -1,3 +1,5 @@
+'use strict';
+
 var express = require('express');
 var router = express.Router();
 var moment = require('moment');
@@ -113,7 +115,7 @@ router.put('/return/:id', function(req, res, next) {
       .then(function(loandetails){
         // loop over err messages
         var errMessages = [];
-        for (i=0; i<err.errors.length; i++) {
+        for (var i=0; i<err.errors.length; i++) {
           errMessages[i] = err.errors[i].message;
         }
         loandetails.returned_on = moment().format('YYYY-MM-DD');
@@ -122,7 +124,7 @@ router.put('/return/:id', function(req, res, next) {
           loan: loandetails,
           errors: errMessages
         });
-      })
+      });
     } else {
       // if it's not a validation error, send to middleware error handler
       return next(err);
@@ -176,7 +178,7 @@ router.post('/new', function(req, res, next) {
 
       // loop over err messages
       var errMessages = [];
-      for (i=0; i<err.errors.length; i++) {
+      for (var i=0; i<err.errors.length; i++) {
         errMessages[i] = err.errors[i].message;
       }
 
@@ -200,8 +202,8 @@ router.post('/new', function(req, res, next) {
             return_by: moment().add(7, 'days').format('YYYY-MM-DD'),
             errors: errMessages
           });
-        }) // ends then
-      ) // ends then
+        }); // ends then
+      ); // ends then
     } else {
       // if it's not a validation error, send to middleware error handler
       return next(err);

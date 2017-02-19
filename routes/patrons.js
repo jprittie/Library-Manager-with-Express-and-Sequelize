@@ -28,7 +28,7 @@ router.get('/', function(req, res, next) {
 router.get('/new', function(req, res, next) {
   res.render('partials/newpatron', {
     title: 'Create New Patron'
-  })
+  });
   if (err) return next(err);
 });
 
@@ -43,7 +43,7 @@ router.post('/new', function(req, res, next) {
 
       // loop over err messages
       var errMessages = [];
-      for (i=0; i<err.errors.length; i++) {
+      for (var i=0; i<err.errors.length; i++) {
         errMessages[i] = err.errors[i].message;
       }
 
@@ -57,7 +57,7 @@ router.post('/new', function(req, res, next) {
         patronLibraryId: req.body.library_id,
         patronZipCode: req.body.zip_code,
         errors: errMessages
-      })
+      });
     } else {
       // else send to middleware error handler
       return next(err);
@@ -79,7 +79,7 @@ router.get('/:id', function(req, res, next) {
         title: 'Patron Details',
         patron: patrondetails[0],
         loans: patrondetails[0].Loans
-      })
+      });
     } else {
       err.status == 404;
       return next(err);
@@ -108,7 +108,7 @@ router.put('/:id', function(req, res, next) {
         var patrondetails = JSON.parse(JSON.stringify(patronlistings));
         // loop over err messages
         var errMessages = [];
-        for (i=0; i<err.errors.length; i++) {
+        for (var i=0; i<err.errors.length; i++) {
           errMessages[i] = err.errors[i].message;
         }
 
@@ -118,7 +118,9 @@ router.put('/:id', function(req, res, next) {
             patron: patrondetails[0],
             loans: patrondetails[0].Loans,
             errors: errMessages
-          })
+          });
+        } // ends if
+
       }); // ends then
     } else {
       // else send to middleware error handler

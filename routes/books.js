@@ -85,7 +85,7 @@ router.post('/new', function(req, res, next) {
 
       // loop over err messages
       var errMessages = [];
-      for (i=0; i<err.errors.length; i++) {
+      for (var i=0; i<err.errors.length; i++) {
         errMessages[i] = err.errors[i].message;
       }
 
@@ -154,7 +154,7 @@ router.put('/:id', function(req, res, next) {
         var loansdata = JSON.parse(JSON.stringify(bookdetails));
         // loop over err messages
         var errMessages = [];
-        for (i=0; i<err.errors.length; i++) {
+        for (var i=0; i<err.errors.length; i++) {
           errMessages[i] = err.errors[i].message;
         }
 
