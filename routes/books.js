@@ -13,10 +13,11 @@ router.get('/', function(req, res, next) {
         books: booklistings
       });
     } else {
-      res.send(404);
+      err.status == 404;
+      return next (err);
     }
   }).catch(function(err){
-    res.send(500);
+    return next(err);
   });
 });
 
@@ -33,10 +34,11 @@ router.get('/overdue', function(req, res, next) {
         loans: booklistings
       });
     } else {
-      res.send(404);
+      err.status == 404;
+      return next (err);
     }
   }).catch(function(err){
-    res.send(500);
+    return next(err);
   });
 });
 
@@ -53,10 +55,11 @@ router.get('/checked_out', function(req, res, next) {
         loans: booklistings
       });
     } else {
-      res.send(404);
+      err.status == 404;
+      return next (err);
     }
   }).catch(function(err){
-    res.send(500);
+    return next(err)
   });
 });
 
@@ -76,7 +79,6 @@ router.post('/new', function(req, res, next) {
     res.redirect('/books/');
   }).catch(function(err){
     if (err.name == 'SequelizeValidationError') {
-      console.log("Validation error");
 
       // loop over err messages
       var errMessages = [];
@@ -85,7 +87,6 @@ router.post('/new', function(req, res, next) {
       }
 
       /* I want to keep existing fields from clearing out on submit (i.e., so that if there's a validation error the librarian doesn't have to re-enter all the data), so I have added logic in the newbook template to check which properties of req.body exist. I'm making req.body available to the template via the following object */
-
       res.render('partials/newbook', {
         title: 'Create New Book',
         bookTitle: req.body.title,
@@ -96,11 +97,10 @@ router.post('/new', function(req, res, next) {
       });
 
     } else {
-      res.sendStatus(500);
-      next(err);
+      return next(err);
     }
-  });
-});
+  }); // ends catch
+}); // ends post
 
 
 
@@ -122,12 +122,12 @@ router.get('/:id', function(req, res, next) {
         loans: loansdata[0].Loans
       });
     } else {
-      res.sendStatus(404);
+      err.status == 404;
+      return next (err);
     }
 
   }).catch(function(err){
-    res.sendStatus(500);
-    next(err);
+    return next(err);
   });
 });
 
@@ -139,9 +139,8 @@ router.put('/:id', function(req, res, next) {
   }).then(function(book){
     res.redirect('/books/' + book.id);
   }).catch(function(err){
-
+    // if validation error, re-render page with error messages
     if (err.name === 'SequelizeValidationError') {
-      console.log("Validation error");
 
       Book.findAll({
         include: [{ model: Loan, include: [{ model: Patron }] }],
@@ -164,15 +163,15 @@ router.put('/:id', function(req, res, next) {
             errors: errMessages
           });
         } else {
-          res.sendStatus(404);
+          err.status == 404;
+          return next (err);
         }
 
       }).catch(function(err){
-        res.sendStatus(500);
-        next(err);
+        return next(err);
       });
-    }
-  });
-});
+    } // ends if validation error
+  }); // ends first catch block
+}); // ends PUT
 
 module.exports = router;

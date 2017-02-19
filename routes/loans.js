@@ -12,14 +12,23 @@ router.get('/', function(req, res, next) {
     include: [{ all: true }],
     order: 'Book.title'
   }).then(function(loanlistings){
-    var loansdata = JSON.parse(JSON.stringify(loanlistings));
-    // console.log(loansdata);
-    res.render('partials/loans', {
-      title: 'Loans',
-      loans: loanlistings
-    });
+
+    if (loanlistings) {
+      res.render('partials/loans', {
+        title: 'Loans',
+        loans: loanlistings
+      });
+    } else {
+      err.status == 404;
+      return next(err);
+    }
+
+  }).catch(function(err){
+    return next(err);
   });
-});
+}); // ends get
+
+
 
 // GET overdue loans
 router.get('/overdue', function(req, res, next) {
@@ -28,15 +37,21 @@ router.get('/overdue', function(req, res, next) {
 		where: { return_by: { $lt: moment().format('YYYY-MM-DD').toString() }, returned_on: null }
   }).then(function(loanlistings){
     var loansdata = JSON.parse(JSON.stringify(loanlistings));
-    console.log(loansdata);
+
+    if (loanlistings) {
       res.render('partials/overdueloans', {
         title: 'Overdue Loans',
         loans: loansdata
       });
-  }).catch(function(error) {
-    res.sendStatus(500);
+    } else {
+      err.status == 404;
+      return next(err);
+    }
+
+  }).catch(function(err) {
+    return next(err);
   });
-});
+}); // ends get
 
 // GET checked-out loans
 router.get('/checked_out', function(req, res, next) {
@@ -44,12 +59,17 @@ router.get('/checked_out', function(req, res, next) {
     include: [{ all: true }],
   	where: { returned_on: null }
   }).then(function(loanlistings){
-    res.render('partials/checkedoutloans', {
-      title: 'Checked-Out Loans',
-      loans: loanlistings
-    });
-  }).catch(function(error) {
-    res.sendStatus(500);
+    if (loanlistings) {
+      res.render('partials/checkedoutloans', {
+        title: 'Checked-Out Loans',
+        loans: loanlistings
+      });
+    } else {
+      err.status == 404;
+      return next(err);
+    }
+  }).catch(function(err) {
+    return next(err);
   });
 });
 
@@ -61,13 +81,18 @@ router.get('/return/:id', function(req, res, next) {
     include: [{ all: true }],
   })
   .then(function(loandetails){
-    loandetails.returned_on = moment().format('YYYY-MM-DD');
-    res.render('partials/returnbook', {
-      title: 'Return Book',
-      loan: loandetails
-    });
+    if (loandetails) {
+      loandetails.returned_on = moment().format('YYYY-MM-DD');
+      res.render('partials/returnbook', {
+        title: 'Return Book',
+        loan: loandetails
+      });
+    } else {
+      err.status == 404;
+      return next(err);
+    }
   }).catch(function(err){
-    res.sendStatus(500);
+    return next(err);
   });
 });
 
@@ -79,10 +104,8 @@ router.put('/return/:id', function(req, res, next) {
   }).then(function(loan){
     res.redirect('/loans/');
   }).catch(function(err){
-
+    // if validation error, re-render page with error messages
     if (err.name == 'SequelizeValidationError') {
-
-      console.log("Validation error");
 
       Loan.findById((req.params.id), {
         include: [{ all: true }],
@@ -100,7 +123,10 @@ router.put('/return/:id', function(req, res, next) {
           errors: errMessages
         });
       })
-    } // ends if
+    } else {
+      // if it's not a validation error, send to middleware error handler
+      return next(err);
+    }
 
   }); // ends catch
 });
@@ -134,8 +160,7 @@ router.get('/new', function(req, res, next) {
         return_by: moment().add(7, 'days').format('YYYY-MM-DD')
       });
     }).catch(function(err){
-      res.sendStatus(500);
-      next(err);
+      return next(err);
     })
   );
 });
@@ -146,10 +171,8 @@ router.post('/new', function(req, res, next) {
   .then(function(loan){
     res.redirect('/loans/');
   }).catch(function(err){
-
+    // if validation error, re-render page with error messages
     if (err.name == 'SequelizeValidationError') {
-
-      console.log("Validation error");
 
       // loop over err messages
       var errMessages = [];
@@ -179,12 +202,11 @@ router.post('/new', function(req, res, next) {
           });
         }) // ends then
       ) // ends then
-    } // ends if
-
-  }).catch(function(err){
-    res.sendStatus(500);
-    next(err);
-  });
+    } else {
+      // if it's not a validation error, send to middleware error handler
+      return next(err);
+    }
+  }); // ends catch
 }); // ends POST
 
 module.exports = router;
