@@ -22,3 +22,6 @@ block content
       input#returned_on(type='text' name='returned_on' value=loan.returned_on)
     p
       input(type='submit' value='Return Book')
+      
+  if errors
+    include ./error
