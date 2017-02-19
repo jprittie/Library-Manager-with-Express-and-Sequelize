@@ -202,7 +202,7 @@ router.post('/new', function(req, res, next) {
             return_by: moment().add(7, 'days').format('YYYY-MM-DD'),
             errors: errMessages
           });
-        }); // ends then
+        }) // ends then
       ); // ends then
     } else {
       // if it's not a validation error, send to middleware error handler
