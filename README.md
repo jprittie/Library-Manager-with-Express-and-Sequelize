@@ -1,6 +1,9 @@
 ## Library manager with Express, Jade and Sequelize
 *Project 10 of Treehouse Full Stack JavaScript course*
 
+### To run this project:
+Run `git clone https://github.com/jprittie/Library-manager-with-Express-and-Sequelize.git` to clone the project on your local machine. Run `npm install` to install all the dependencies. Run `npm start` to start the project with the node server. Navigate to localhost:3000.
+
 
 ### Project objectives:
 This project creates a library management system for a small library. The librarian has been using a simple sqlite database and has been entering data in manually. The librarian wants a more intuitive way to handle the library's books, patrons and loans.
